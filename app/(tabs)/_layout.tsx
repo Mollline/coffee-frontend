@@ -1,10 +1,9 @@
 import { Tabs } from "expo-router";
 import React from "react";
-
-import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { TabBarIcon } from "@/assets/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-
+import { Home, Package, ShoppingCart, Users } from "lucide-react";
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
@@ -18,26 +17,40 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "home" : "home-outline"}
-              color={color}
-            />
+            <Home className="h-4 w-4" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="orders/orders"
         options={{
-          title: "Explore",
+          title: "",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? "code-slash" : "code-slash-outline"}
-              color={color}
-            />
+            <ShoppingCart className="h-4 w-4" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="favorite"
+        options={{
+          title: "",
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => (
+            <Package className="h-4 w-4" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="costumers"
+        options={{
+          title: "",
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => (
+            <Users className="h-4 w-4" color={color} />
           ),
         }}
       />

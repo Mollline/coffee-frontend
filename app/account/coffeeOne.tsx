@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import Stepper from "../../components/stepper";
+import Stepper from "../../assets/components/stepper";
 import {
   View,
   ImageBackground,

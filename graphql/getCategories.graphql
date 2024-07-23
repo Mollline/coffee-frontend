@@ -1,0 +1,27 @@
+query GetAllCategories {
+  getAllCategories {
+    id
+    name
+  }
+}
+
+mutation EditCategory($editCategoryId: ID!, $input: EditCategoryInput!) {
+  editCategory(id: $editCategoryId, input: $input) {
+    id
+    name
+  }
+}
+
+mutation DeleteCategory($deleteCategoryId: ID!) {
+  deleteCategory(id: $deleteCategoryId) {
+    name
+    id
+  }
+}
+
+mutation CreateCategory($input: CreateCategoryInput!) {
+  createCategory(input: $input) {
+    name
+    id
+  }
+}

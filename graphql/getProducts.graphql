@@ -1,0 +1,61 @@
+query GetAllProducts {
+  getAllProducts {
+    id
+    imageUrl
+    name
+    price {
+      small
+      medium
+      large
+    }
+    description
+    category
+    size
+  }
+}
+mutation EditProduct($editProductId: ID!, $input: EditProductInput!) {
+  editProduct(id: $editProductId, input: $input) {
+    id
+    imageUrl
+    name
+    price {
+      small
+      medium
+      large
+    }
+    description
+    category
+    size
+  }
+}
+mutation DeleteProduct($deleteProductId: ID!) {
+  deleteProduct(id: $deleteProductId) {
+    id
+    imageUrl
+    name
+    price {
+      small
+      medium
+      large
+    }
+    description
+    category
+    size
+  }
+}
+
+mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
+    id
+    imageUrl
+    name
+    price {
+      small
+      medium
+      large
+    }
+    description
+    category
+    size
+  }
+}

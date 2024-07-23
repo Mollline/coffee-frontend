@@ -1,0 +1,71 @@
+query GetAllUsers {
+  getAllUsers {
+    paymentInfo {
+      cardNumber
+      cardHolder
+      cvv
+      expirationDate
+    }
+    password
+    id
+    favorites
+    fullName
+    email
+    avatar
+    address
+  }
+}
+
+mutation EditUser($editUserId: ID!, $input: EditUserInput!) {
+  editUser(id: $editUserId, input: $input) {
+    paymentInfo {
+      cardHolder
+      cardNumber
+      cvv
+      expirationDate
+    }
+    password
+    id
+    fullName
+    favorites
+    email
+    avatar
+    address
+  }
+}
+
+mutation DeleteUser($deleteUserId: ID!) {
+  deleteUser(id: $deleteUserId) {
+    paymentInfo {
+      cardHolder
+      cardNumber
+      cvv
+      expirationDate
+    }
+    password
+    id
+    favorites
+    email
+    avatar
+    address
+    fullName
+  }
+}
+
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    paymentInfo {
+      cardHolder
+      cardNumber
+      cvv
+      expirationDate
+    }
+    password
+    fullName
+    favorites
+    id
+    email
+    avatar
+    address
+  }
+}

@@ -1,0 +1,35 @@
+query GetAllPromotions {
+  getAllPromotions {
+    title
+    productId
+    id
+    description
+  }
+}
+
+mutation EditPromotion($editPromotionId: ID!, $input: EditPromotionInput!) {
+  editPromotion(id: $editPromotionId, input: $input) {
+    id
+    productId
+    title
+    description
+  }
+}
+
+mutation DeletePromotion($deletePromotionId: ID!) {
+  deletePromotion(id: $deletePromotionId) {
+    id
+    productId
+    title
+    description
+  }
+}
+
+mutation CreatePromotion($input: CreatePromotionInput!) {
+  createPromotion(input: $input) {
+    id
+    productId
+    title
+    description
+  }
+}

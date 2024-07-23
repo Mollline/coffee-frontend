@@ -1,0 +1,61 @@
+query GetAllOrders {
+  getAllOrders {
+    id
+    products {
+      productId
+      size
+      quantity
+    }
+    user
+    date
+    state
+    milkAmount
+    promotionCode
+  }
+}
+
+mutation EditOrder($editOrderId: String!) {
+  editOrder(id: $editOrderId) {
+    id
+    user
+    date
+    state
+    milkAmount
+    promotionCode
+    products {
+      productId
+      size
+      quantity
+    }
+  }
+}
+mutation DeleteOrder($deleteOrderId: String!) {
+  deleteOrder(id: $deleteOrderId) {
+    id
+    products {
+      productId
+      size
+      quantity
+    }
+    user
+    date
+    state
+    milkAmount
+    promotionCode
+  }
+}
+mutation CreateOrder {
+  createOrder {
+    id
+    products {
+      productId
+      size
+      quantity
+    }
+    user
+    date
+    state
+    milkAmount
+    promotionCode
+  }
+}

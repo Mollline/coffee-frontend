@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   ImageBackground,
@@ -9,10 +9,27 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
-import { LoginWith } from "@/components/LoginWith";
+import { LoginWith } from "@/assets/components/LoginWith";
+import { useGetAllUsersQuery, User } from "@/generated";
 export default function HomeScreen() {
   const router = useRouter();
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { data, loading, error } = useGetAllUsersQuery();
+  const signin = async () => {
+    if (data?.getAllUsers) {
+      const users = data?.getAllUsers;
+      const foundUser = users.find((user) => user.email === email);
+      if (foundUser?.password === password) {
+        const fullname = foundUser.fullName;
+        localStorage.setItem("fullname", fullname);
+        localStorage.setItem("email", email);
+        router.push("/");
+      } else {
+        alert("incorrect password or email");
+      }
+    }
+  };
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -41,16 +58,20 @@ export default function HomeScreen() {
               style={styles.input}
               placeholder="E-mail Address"
               placeholderTextColor="#828282"
+              value={email}
+              onChangeText={(text) => setEmail(text)}
             />
             <TextInput
               style={styles.input}
               placeholder="Password"
               placeholderTextColor="#828282"
               secureTextEntry
+              value={password}
+              onChangeText={(text) => setPassword(text)}
             />
             <Text style={styles.forgot}>Forgot Password?</Text>
           </View>
-          <TouchableOpacity onPress={() => router.push("account/logIn")}>
+          <TouchableOpacity onPress={signin}>
             <Text style={styles.signIn}>Sign in</Text>
           </TouchableOpacity>
           <View style={{ alignItems: "center" }}>

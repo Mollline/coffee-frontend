@@ -1,0 +1,35 @@
+query GetAllPromotionCodes {
+  getAllPromotionCodes {
+    id
+    code
+    discount
+    expirationDate
+  }
+}
+mutation EditPromotionCode(
+  $editPromotionCodeId: ID!
+  $input: EditPromotionCodeInput!
+) {
+  editPromotionCode(id: $editPromotionCodeId, input: $input) {
+    id
+    code
+    discount
+    expirationDate
+  }
+}
+mutation DeletePromotionCode($deletePromotionCodeId: ID!) {
+  deletePromotionCode(id: $deletePromotionCodeId) {
+    id
+    code
+    discount
+    expirationDate
+  }
+}
+mutation CreatePromotionCode($input: CreatePromotionCodeInput!) {
+  createPromotionCode(input: $input) {
+    id
+    code
+    discount
+    expirationDate
+  }
+}
