@@ -1,3 +1,4 @@
+import { useGetAllOrdersQuery } from "@/generated";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
@@ -11,6 +12,8 @@ import {
 import Svg, { Path } from "react-native-svg";
 
 export default function HomeScreen() {
+  const { data, loading, error } = useGetAllOrdersQuery();
+  console.log(data);
   const router = useRouter();
   const product = [
     "product",
@@ -32,22 +35,19 @@ export default function HomeScreen() {
               fill="#CE9760"
             />
           </Svg>
-          <Text style={styles.headerText}>My Orders</Text>
-          <View></View>
+          <Text style={styles.headerText}>My Orders</Text>\
         </View>
       </View>
       <View>
-        <View style={{ padding: 20 }}>
-          <View style={styles.image}></View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
+        <View>
+          <View style={styles.order}>
+            <View style={styles.image}></View>
             <View>
-              <Text>erfdc</Text>
-              <Text></Text>
-              <Text></Text>
+              <Text>Name</Text>
+              <Text>Qty: 2</Text>
+              <Text>$25</Text>
             </View>
-            <Text>erfsd</Text>
+            <Text>complete</Text>
           </View>
         </View>
       </View>
@@ -78,5 +78,28 @@ const styles = StyleSheet.create({
     width: 104,
     height: 103,
     backgroundColor: "#CE9760",
+  },
+  order: {
+    width: "100%",
+    height: 150,
+    borderRadius: 10,
+    padding: 10,
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  imageText: {
+    color: "white",
+    fontSize: 22,
+    fontWeight: 700,
+  },
+  count: {
+    backgroundColor: "#543A20",
+    width: 27,
+    height: 27,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

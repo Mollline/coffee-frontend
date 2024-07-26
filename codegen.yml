@@ -1,7 +1,6 @@
 overwrite: true
 schema: "http://localhost:3000/api/graphql"
-documents: "./graphql/**/*.graphql"2
-
+documents: "./graphql/**/*.graphql"
 generates:
   ./generated/index.ts:
     config:

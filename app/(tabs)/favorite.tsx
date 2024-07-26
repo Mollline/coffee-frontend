@@ -1,5 +1,7 @@
+import { useAppContext } from "@/context/DataContext";
+import { Product, useGetAllProductsQuery } from "@/generated";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,28 +11,32 @@ import {
   TextInput,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
-
 export default function HomeScreen() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const { data, loading, error } = useGetAllProductsQuery();
+  const [searchQuery, setSearchQuery] = useState("");
+  useEffect(() => {
+    if (data?.getAllProducts) {
+      setProducts(data.getAllProducts);
+      // const filteredProducts = data.getAllProducts.filter((p)=>p===)
+    }
+  }, [data]);
+  console.log(data);
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const router = useRouter();
-  const product = [
-    "product",
-    "product",
-    "product",
-    "product",
-    "product",
-    "product",
-    "product",
-  ];
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Svg width="11" height="18" viewBox="0 0 11 18" fill="none">
-          <Path
-            d="M3.88905 8.75047L10.695 15.5563L8.7505 17.5008L0 8.75047L8.7505 0L10.695 1.94454L3.88905 8.75047Z"
-            fill="#CE9760"
-          />
-        </Svg>
+        <TouchableOpacity onPress={() => router.push("")}>
+          <Svg width="11" height="18" viewBox="0 0 11 18" fill="none">
+            <Path
+              d="M3.88905 8.75047L10.695 15.5563L8.7505 17.5008L0 8.75047L8.7505 0L10.695 1.94454L3.88905 8.75047Z"
+              fill="#CE9760"
+            />
+          </Svg>
+        </TouchableOpacity>
         <Text style={styles.headerText}>Favorite</Text>
         <Svg width="17" height="23" viewBox="0 0 17 23" fill="none">
           <Path
@@ -40,7 +46,12 @@ export default function HomeScreen() {
         </Svg>
       </View>
       <View style={styles.searchContainer}>
-        <TextInput style={styles.input} placeholder="Search" />
+        <TextInput
+          style={styles.input}
+          placeholder="Search"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
         <View style={styles.searchButton}>
           <Svg width="21" height="21" viewBox="0 0 21 21" fill="none">
             <Path
@@ -51,14 +62,14 @@ export default function HomeScreen() {
         </View>
       </View>
       <ScrollView horizontal style={styles.scrollView}>
-        {product.map((e, index) => (
+        {filteredProducts.map((product, index) => (
           <View key={index} style={styles.product}>
             <View style={styles.productImage}></View>
             <View style={styles.productInfo}>
               <View style={styles.productTextContainer}>
-                <Text style={styles.discountText}>Arabica</Text>
+                <Text style={styles.discountText}>{product.name}</Text>
                 <Text style={styles.productDescription}>
-                  Lorem ipsum dolor sit amet cons
+                  {product.description}
                 </Text>
               </View>
               <Text style={styles.productPrice}>$15</Text>
@@ -167,3 +178,183 @@ const styles = StyleSheet.create({
     marginTop: -80,
   },
 });
+// import React, { useState, useEffect } from "react";
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   ScrollView,
+//   TextInput,
+//   ActivityIndicator,
+// } from "react-native";
+// import { Product, useGetAllProductsQuery } from "@/generated";
+
+// export default function HomeScreen() {
+//   const [products, setProducts] = useState<Product[]>([]);
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const { data, loading, error } = useGetAllProductsQuery();
+
+//   useEffect(() => {
+//     if (data?.getAllProducts) {
+//       setProducts(data.getAllProducts);
+//     }
+//   }, [data]);
+
+//   if (loading) {
+//     return (
+//       <View style={styles.loadingContainer}>
+//         <ActivityIndicator size="large" color="#CE9760" />
+//       </View>
+//     );
+//   }
+
+//   if (error) {
+//     return (
+//       <View style={styles.errorContainer}>
+//         <Text style={styles.errorText}>An error occurred: {error.message}</Text>
+//       </View>
+//     );
+//   }
+
+//   const filteredProducts = products.filter((product) =>
+//     product.name.toLowerCase().includes(searchQuery.toLowerCase())
+//   );
+
+//   return (
+//     <View style={styles.container}>
+//       <View style={styles.header}>
+//         <Text style={styles.headerText}>Favorite</Text>
+//       </View>
+//       <View style={styles.searchContainer}>
+//         <TextInput
+//           style={styles.input}
+//           placeholder="Search"
+//           value={searchQuery}
+//           onChangeText={setSearchQuery}
+//         />
+//         <View style={styles.searchButton}></View>
+//       </View>
+//       <ScrollView horizontal style={styles.scrollView}>
+//         {filteredProducts.map((product, index) => (
+//           <View key={index} style={styles.product}>
+//             <View style={styles.productImage}></View>
+//             <View style={styles.productInfo}>
+//               <View style={styles.productTextContainer}>
+//                 <Text style={styles.discountText}>{product.name}</Text>
+//                 <Text style={styles.productDescription}>
+//                   {product.description}
+//                 </Text>
+//               </View>
+//               <Text style={styles.productPrice}>$15</Text>
+//               <View style={styles.heartIcon}></View>
+//             </View>
+//           </View>
+//         ))}
+//       </ScrollView>
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#543A20",
+//     padding: 20,
+//   },
+//   header: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     width: "100%",
+//     marginVertical: 30,
+//   },
+//   headerText: {
+//     fontSize: 22,
+//     fontWeight: "700",
+//     color: "white",
+//   },
+//   searchContainer: {
+//     flexDirection: "row",
+//     alignItems: "center",
+//     marginVertical: 20,
+//   },
+//   input: {
+//     flex: 1,
+//     height: 40,
+//     backgroundColor: "white",
+//     borderTopLeftRadius: 10,
+//     borderBottomLeftRadius: 10,
+//     paddingHorizontal: 10,
+//     borderColor: "#CE9760",
+//     borderWidth: 1,
+//   },
+//   searchButton: {
+//     width: 59,
+//     height: 40,
+//     backgroundColor: "#CE9760",
+//     borderTopRightRadius: 10,
+//     borderBottomRightRadius: 10,
+//     borderColor: "#CE9760",
+//     borderWidth: 1,
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+//   scrollView: {
+//     marginTop: 20,
+//   },
+//   product: {
+//     width: 166,
+//     height: 179,
+//     backgroundColor: "#CE9760",
+//     borderRadius: 7,
+//     alignItems: "center",
+//     padding: 7,
+//     marginRight: 20,
+//   },
+//   productImage: {
+//     width: 95,
+//     height: 81,
+//     backgroundColor: "white",
+//   },
+//   productInfo: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     width: "100%",
+//   },
+//   productTextContainer: {
+//     width: 101,
+//     gap: 10,
+//   },
+//   discountText: {
+//     fontSize: 18,
+//     lineHeight: 27,
+//     fontWeight: "600",
+//     color: "white",
+//   },
+//   productDescription: {
+//     fontSize: 9,
+//     color: "#39260B",
+//   },
+//   productPrice: {
+//     fontSize: 16,
+//     color: "#39260B",
+//     fontWeight: "bold",
+//     marginRight: -40,
+//   },
+//   heartIcon: {
+//     marginTop: -80,
+//   },
+//   loadingContainer: {
+//     flex: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   errorContainer: {
+//     flex: 1,
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   errorText: {
+//     fontSize: 18,
+//     color: "red",
+//   },
+// });

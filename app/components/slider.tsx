@@ -1,22 +1,60 @@
-import { cn } from "@/lib/utils";
-import { Slider } from "@/components/ui/slider";
-import { View } from "react-native";
-import { Text } from "react-native-svg";
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Slider from "@mui/material/Slider";
+import MuiInput from "@mui/material/Input";
+import VolumeUp from "@mui/icons-material/VolumeUp";
 
-type SliderProps = React.ComponentProps<typeof Slider>;
+// Styled component for Input
+const Input = styled(MuiInput)`
+  width: 42px;
+`;
 
-export function SliderDemo({ className, ...props }: SliderProps) {
+export default function InputSlider({ value, setValue }) {
+  // Handle slider change
+  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    setValue(Array.isArray(newValue) ? newValue[0] : newValue);
+  };
+
+  // Handle input change
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value === "" ? 0 : Number(event.target.value));
+  };
+
+  // Handle input blur to ensure value is within range
+  const handleBlur = () => {
+    if (value < 0) {
+      setValue(0);
+    } else if (value > 100) {
+      setValue(100);
+    }
+  };
+
   return (
-    <View>
-      <Slider
-        defaultValue={[50]}
-        max={100}
-        step={1}
-        className={cn("w-[60%]", className)}
-        color="black"
-        {...props}
-      />
-      <Text>erdfd</Text>
-    </View>
+    <Box sx={{ width: 250 }}>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs>
+          <Slider
+            value={typeof value === "number" ? value : 0}
+            onChange={handleSliderChange}
+            aria-labelledby="input-slider"
+          />
+        </Grid>
+        <Grid item>
+          <Input
+            value={value}
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            inputProps={{
+              min: 0,
+              max: 100,
+              type: "number",
+            }}
+          />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }

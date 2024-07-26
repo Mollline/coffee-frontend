@@ -10,26 +10,36 @@ import {
 import { SingleProduct } from "../components/singleProduct";
 import Svg, { Path } from "react-native-svg";
 import { Category, useGetAllCategoriesQuery } from "@/generated";
+import { useAppContext } from "@/context/DataContext";
 export default function HomeScreen() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
+  const [isMounted, setIsMounted] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const { users } = useAppContext();
   const { data, loading, error } = useGetAllCategoriesQuery();
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!isMounted) return;
+
     const isUserLoggedIn = () => {
       const user = localStorage.getItem("email");
       const name = localStorage.getItem("fullname");
       console.log(name);
       if (!user) {
-        router.push("/account/signin");
+        router.push("/account/start");
       } else {
         console.log("great");
       }
     };
+
     isUserLoggedIn();
-  });
+  }, [isMounted, router]);
+
   useEffect(() => {
     if (data?.getAllCategories) {
       setCategories(data.getAllCategories);
@@ -50,7 +60,7 @@ export default function HomeScreen() {
         <View style={styles.acc}>
           <View style={styles.profile}></View>
           <View>
-            <Text style={styles.name}>Full Name</Text>
+            <Text style={styles.name}>{users[0].fullName}</Text>
             <Text style={styles.morning}>Good morning</Text>
           </View>
         </View>

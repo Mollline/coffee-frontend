@@ -303,10 +303,10 @@ export type Query = {
   __typename?: 'Query';
   getAllCategories?: Maybe<Array<Category>>;
   getAllOrders?: Maybe<Array<Order>>;
-  getAllProducts?: Maybe<Array<Maybe<Product>>>;
+  getAllProducts?: Maybe<Array<Product>>;
   getAllPromotionCodes?: Maybe<Array<PromotionCode>>;
   getAllPromotions?: Maybe<Array<Promotion>>;
-  getAllUsers?: Maybe<Array<Maybe<User>>>;
+  getAllUsers?: Maybe<Array<User>>;
 };
 
 export enum Size {
@@ -381,7 +381,7 @@ export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __ty
 export type GetAllProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllProductsQuery = { __typename?: 'Query', getAllProducts?: Array<{ __typename?: 'Product', id: string, imageUrl: string, name: string, description: string, category: string, size: Size, price: { __typename?: 'Price', small?: number | null, medium?: number | null, large?: number | null } } | null> | null };
+export type GetAllProductsQuery = { __typename?: 'Query', getAllProducts?: Array<{ __typename?: 'Product', id: string, imageUrl: string, name: string, description: string, category: string, size: Size, price: { __typename?: 'Price', small?: number | null, medium?: number | null, large?: number | null } }> | null };
 
 export type EditProductMutationVariables = Exact<{
   editProductId: Scalars['ID']['input'];
@@ -462,7 +462,7 @@ export type CreatePromotionMutation = { __typename?: 'Mutation', createPromotion
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers?: Array<{ __typename?: 'User', password: string, id: string, favorites?: Array<string | null> | null, fullName: string, email: string, avatar?: string | null, address?: string | null, paymentInfo?: { __typename?: 'PaymentInfo', cardNumber: string, cardHolder: string, cvv: string, expirationDate: string } | null } | null> | null };
+export type GetAllUsersQuery = { __typename?: 'Query', getAllUsers?: Array<{ __typename?: 'User', password: string, id: string, favorites?: Array<string | null> | null, fullName: string, email: string, avatar?: string | null, address?: string | null, paymentInfo?: { __typename?: 'PaymentInfo', cardNumber: string, cardHolder: string, cvv: string, expirationDate: string } | null }> | null };
 
 export type EditUserMutationVariables = Exact<{
   editUserId: Scalars['ID']['input'];

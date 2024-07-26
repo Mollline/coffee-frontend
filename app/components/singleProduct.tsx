@@ -1,3 +1,4 @@
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import {
   View,
@@ -7,25 +8,84 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
-export const SingleProduct = () => {
+import {
+  Product,
+  useEditUserMutation,
+  useGetAllProductsQuery,
+} from "@/generated";
+import { useAppContext } from "@/context/DataContext";
+
+export const SingleProduct: React.FC = () => {
   const router = useRouter();
-  const products = [
-    "product",
-    "product",
-    "product",
-    "product",
-    "product",
-    "product",
-    "product",
-  ];
-  const order = () => {
+  const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const { users, product, setProduct } = useAppContext(); // Access context data here
+
+  const { data, loading, error } = useGetAllProductsQuery();
+  const [editUserMutation] = useEditUserMutation();
+
+  useEffect(() => {
+    if (data?.getAllProducts) {
+      setProducts(data.getAllProducts);
+    }
+  }, [data]);
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error) {
+    console.log(error);
+    return <Text>Error loading products</Text>;
+  }
+  const handlePress = (productId: number) => {
+    setSelectedProducts((prevSelected) => {
+      if (prevSelected.includes(productId)) {
+        return prevSelected.filter((id) => id !== productId);
+      } else {
+        return [...prevSelected, productId];
+      }
+    });
+  };
+
+  const editUserFav = async (product: Product) => {
+    const selectedUser = users[0]; // Assuming the first user is the one to update
+
+    console.log("Product ID:", product.id);
+
+    if (!selectedUser) {
+      console.error("No user selected for updating.");
+      return;
+    }
+
+    try {
+      await editUserMutation({
+        variables: {
+          input: {
+            favorites: [product.id], // Ensure correct ID format
+            avatar: selectedUser.avatar,
+            fullName: selectedUser.fullName,
+            email: selectedUser.email,
+            password: selectedUser.password,
+          },
+        },
+      });
+    } catch (err) {
+      console.error("Error updating favorites:", err);
+    }
+  };
+
+  const order = (product: Product) => {
+    console.log(product);
+    setProduct(product);
     router.push("order/ingredients");
   };
+
   return (
     <ScrollView horizontal style={styles.productCon}>
-      {products.map((product, index) => (
-        <TouchableOpacity onPress={order}>
-          <View key={index} style={styles.product}>
+      {products.map((product: Product) => (
+        <TouchableOpacity key={product.id} onPress={() => order(product)}>
+          <View style={styles.product}>
             <View
               style={{ width: 95, height: 81, backgroundColor: "white" }}
             ></View>
@@ -37,9 +97,9 @@ export const SingleProduct = () => {
               }}
             >
               <View style={{ width: 101, gap: 10 }}>
-                <Text style={styles.discountText}>Arabica</Text>
+                <Text style={styles.discountText}>{product.name}</Text>
                 <Text style={{ fontSize: 9, color: "#39260B" }}>
-                  Lorem ipsum dolor sit amet cons{" "}
+                  {product.description}
                 </Text>
               </View>
               <Text
@@ -52,14 +112,22 @@ export const SingleProduct = () => {
               >
                 $15
               </Text>
-              <View style={{ marginTop: -95 }}>
-                <Svg width="17" height="16" viewBox="0 0 17 16" fill="none">
+              <TouchableOpacity
+                onPress={() => {
+                  handlePress(product.id);
+                  editUserFav(product);
+                }}
+                style={{ marginTop: -90 }}
+              >
+                <Svg width="17" height="15" viewBox="0 0 17 15" fill="none">
                   <Path
-                    d="M8.33416 1.27378C10.2917 -0.483333 13.3167 -0.424999 15.2022 1.46447C17.0877 3.35393 17.1525 6.36417 15.3988 8.3275L8.33325 15.4042L1.26782 8.3275C-0.485793 6.36417 -0.420243 3.34918 1.46447 1.46447C3.35131 -0.422374 6.37099 -0.485941 8.33416 1.27378ZM14.0225 2.64175C12.7732 1.38995 10.7563 1.33918 9.4475 2.51406L8.33491 3.5127L7.22175 2.51484C5.90915 1.33831 3.89588 1.39007 2.64297 2.64298C1.40152 3.88443 1.3392 5.87275 2.48327 7.186L8.33325 13.0453L14.1834 7.186C15.3279 5.87225 15.2658 3.88771 14.0225 2.64175Z"
-                    fill="white"
+                    d="M8.33417 1.27378C10.2917 -0.483333 13.3167 -0.424999 15.2022 1.46447C17.0877 3.35393 17.1525 6.36417 15.3988 8.3275L8.33325 15.4042L1.26782 8.3275C-0.485793 6.36417 -0.420243 3.34918 1.46447 1.46447C3.35131 -0.422374 6.37099 -0.485941 8.33417 1.27378Z"
+                    fill={
+                      selectedProducts.includes(product.id) ? "red" : "white"
+                    }
                   />
                 </Svg>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </TouchableOpacity>
@@ -67,6 +135,7 @@ export const SingleProduct = () => {
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   discountText: {
     fontSize: 18,
